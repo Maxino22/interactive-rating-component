@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- displays site properly based on user's device -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="./images/favicon-32x32.png"
+		/>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						fontFamily: {
+							sans: ['Overpass', 'sans-serif'],
+						},
+						colors: {
+							primary: 'hsl(25, 97%, 53%)',
+							lightGray: 'hsl(217, 12%, 63%)',
+							mediumGray: 'hsl(216, 12%, 54%)',
+							darkBlue: 'hsl(213, 19%, 18%)',
+							veryDarkBlue: 'hsl(216, 12%, 8%)',
+						},
+					},
+				},
+			}
+		</script>
+
+		<title>Frontend Mentor | Interactive rating component</title>
+	</head>
+	<body>
+		<section class="bg-veryDarkBlue">
+			<div
+				class="container mx-auto h-screen overflow-x-hidden flex justify-center items-center"
+			>
+				<div id="app">
+					<transition>
+						<div
+							class="bg-darkBlue rounded-2xl max-w-sm flex flex-col space-y-4 justify-start p-6 shadow"
+							v-if="ratingForm"
+						>
+							<!--  star -->
+							<div
+								class="bg-mediumGray bg-opacity-5 rounded-full h-10 w-10 flex items-center justify-center border border-darkBlue"
+							>
+								<img class="h-4 w-4" src="./images/icon-star.svg" alt="" />
+							</div>
+							<!-- titlw -->
+							<h4 class="text-xl font-sans font-bold text-white">
+								How did we do?
+							</h4>
+							<p class="text-mediumGray text-md">
+								Please let us know how we did with your support request. All
+								feedback is appreciated to help us improve our offering!
+							</p>
+							<div class="flex space-x-5 text-md">
+								<rating-component
+									v-for="rating in ratings"
+									:key="rating"
+									:class="ratingColor"
+									@click="ratingValue(rating)"
+									:rating="rating"
+								/>
+								<rating-component />
+							</div>
+
+							<button
+								@click="submitRating"
+								class="w-full text-center text-white bg-primary uppercase px-3 py-2 rounded-3xl hover:bg-mediumGray hover:text-primary"
+							>
+								submit
+							</button>
+						</div>
+						<div
+							class="bg-darkBlue rounded-2xl max-w-sm flex flex-col space-y-4 items-center py-6 px-4 shadow"
+							v-else
+						>
+							<img
+								class="h-20"
+								src="./images/illustration-thank-you.svg"
+								alt=""
+							/>
+							<div
+								class="bg-mediumGray rounded-2xl bg-opacity-5 text-primary text-opacity-70 text-xs px-2 py-1"
+							>
+								You selected {{ rating }} out of 5
+							</div>
+							<h4 class="font-bold text-2xl text-white">Thank You!</h4>
+							<p class="text-mediumGray text-center text-lg">
+								We appreciate you taking the time to give a rating. If you ever
+								need more support, don’t hesitate to get in touch!
+							</p>
+						</div>
+					</transition>
+				</div>
+			</div>
+			<div class="text-sm text-center text-white">
+				Challenge by
+				<a
+					class="text-primary"
+					href="https://www.frontendmentor.io?ref=challenge"
+					target="_blank"
+					>Frontend Mentor</a
+				>. Coded by <a href="#">Your Name Here</a>.
+			</div>
+		</section>
+		<script>
+			const { createApp } = Vue
+
+			const ratingComponent = {
+				name: 'rating-component',
+				template: `	<div
+				          
+									class="rounded-full h-12 w-12 flex items-center justify-center hover:bg-primary hover:text-white"
+								>
+									{{ rating }}
+								</div>`,
+				props: ['rating'],
+			}
+
+			const app = createApp({
+				data() {
+					return {
+						ratings: [1, 2, 3, 4, 5],
+						ratingForm: true,
+						rating: null,
+					}
+				},
+				methods: {
+					ratingValue(value) {
+						this.rating = value
+					},
+					submitRating() {
+						this.ratingForm = false
+					},
+				},
+				computed: {
+					ratingColor() {
+						if (this.rating) {
+							return 'bg-lightGray text-white'
+						}
+						return 'bg-mediumGray bg-opacity-50 text-mediumGray'
+					},
+				},
+			})
+
+			app.component('rating-component', ratingComponent)
+
+			app.mount('#app')
+		</script>
+
+		<!-- Thank you state start -->
+
+		<!-- You selected -->
+		<!-- Add rating here -->
+		<!-- out of 5 Thank you! We appreciate you taking the time to give a rating. If
+		you ever need more support, don’t hesitate to get in touch! -->
+
+		<!-- Thank you state end -->
+	</body>
+</html>
